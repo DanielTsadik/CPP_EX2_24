@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <string>
 
 namespace ariel {
 
@@ -13,7 +14,7 @@ public:
 
     // Member functions
     void loadGraph(const std::vector<std::vector<int>> &matrix);
-    void printGraph() const;
+    std::string printGraph() const;
 
     bool getIsDirected() const;
     size_t getnumVertices() const;
@@ -36,7 +37,12 @@ public:
     Graph operator--(int);   // Post-decrement
 
     Graph operator*(int scalar) const;
+
     Graph &operator*=(int scalar);
+
+    Graph &operator/(int scalar);
+    Graph &operator/=(int scalar);
+
     Graph operator*(const Graph &other) const;
     Graph &operator*=(const Graph &other);
 
@@ -49,6 +55,10 @@ public:
 
     // Friend functions
     friend std::ostream &operator<<(std::ostream &os, const Graph &graph);
+    // Scalar division operator (scalar / graph)
+    friend Graph operator/(int scalar, const Graph &graph);
+     // Scalar multiplication operator (scalar * graph)
+    friend Graph operator*(int scalar, const Graph &graph);
 
 private:
     size_t vertices;
