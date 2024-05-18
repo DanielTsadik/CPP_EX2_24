@@ -1,3 +1,7 @@
+// Daniel Tsadik	
+// ID: 209307727	
+// Mail: tsadik88@gmail.com
+
 /*
  * Demo program for Exercise 3.
  * Author: Benjamin Saldman.

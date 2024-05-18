@@ -1,3 +1,7 @@
+// Daniel Tsadik	
+// ID: 209307727	
+// Mail: tsadik88@gmail.com
+
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
 
@@ -37,7 +41,6 @@ public:
     Graph operator--(int);   // Post-decrement
 
     Graph operator*(int scalar) const;
-
     Graph &operator*=(int scalar);
 
     Graph &operator/(int scalar);
@@ -57,7 +60,7 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const Graph &graph);
     // Scalar division operator (scalar / graph)
     friend Graph operator/(int scalar, const Graph &graph);
-     // Scalar multiplication operator (scalar * graph)
+    // Scalar multiplication operator (scalar * graph)
     friend Graph operator*(int scalar, const Graph &graph);
 
 private:
