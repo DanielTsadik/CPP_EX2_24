@@ -1,5 +1,5 @@
-// Daniel Tsadik	
-// ID: 209307727	
+// Daniel Tsadik
+// ID: 209307727
 // Mail: tsadik88@gmail.com
 
 // Algorithms.cpp
@@ -130,90 +130,89 @@ namespace ariel
     }
 
     bool Algorithms::DFSCycle(const Graph &g, size_t v, vector<bool> &visited, vector<size_t> &parent, deque<int> &cycle)
-{
-    // Mark the current vertex as visited and add it to the cycle
-    visited[v] = true;
-    cycle.push_back(v);
-
-    // Get the adjacency matrix of the graph
-    const vector<vector<int>> &matrix = g.getAdjacencyMatrix();
-
-    // Iterate over all vertices adjacent to the current vertex
-    for (size_t u = 0; u < g.getnumVertices(); u++)
     {
-        // If there is an edge between v and u
-        if (matrix[v][u] != 0)
+        // Mark the current vertex as visited and add it to the cycle
+        visited[v] = true;
+        cycle.push_back(v);
+
+        // Get the adjacency matrix of the graph
+        const vector<vector<int>> &matrix = g.getAdjacencyMatrix();
+
+        // Iterate over all vertices adjacent to the current vertex
+        for (size_t u = 0; u < g.getnumVertices(); u++)
         {
-            // If u has not been visited yet, recursively explore it
-            if (!visited[u])
+            // If there is an edge between v and u
+            if (matrix[v][u] != 0)
             {
-                parent[u] = v;
-                if (DFSCycle(g, u, visited, parent, cycle))
+                // If u has not been visited yet, recursively explore it
+                if (!visited[u])
                 {
+                    parent[u] = v;
+                    if (DFSCycle(g, u, visited, parent, cycle))
+                    {
+                        return true;
+                    }
+                }
+                // If u has been visited and is not the parent of v, a cycle is found
+                else if (parent[v] != u)
+                {
+                    // Construct the cycle path
+                    vector<int> cyclePath;
+                    cyclePath.push_back(u);
+                    for (size_t pv = v; pv != u; pv = parent[pv])
+                    {
+                        cyclePath.push_back(pv);
+                    }
+                    cyclePath.push_back(u);
+
+                    // Print the cycle path
+                    cout << "The cycle is: ";
+                    for (auto it = cyclePath.rbegin(); it != cyclePath.rend(); ++it)
+                    {
+                        cout << *it;
+                        if (it != cyclePath.rend() - 1)
+                        {
+                            cout << "->";
+                        }
+                    }
+                    cout << endl;
+
                     return true;
                 }
             }
-            // If u has been visited and is not the parent of v, a cycle is found
-            else if (parent[v] != u)
-            {
-                // Construct the cycle path
-                vector<int> cyclePath;
-                cyclePath.push_back(u);
-                for (size_t pv = v; pv != u; pv = parent[pv])
-                {
-                    cyclePath.push_back(pv);
-                }
-                cyclePath.push_back(u);
-
-                // Print the cycle path
-                cout << "The cycle is: ";
-                for (auto it = cyclePath.rbegin(); it != cyclePath.rend(); ++it)
-                {
-                    cout << *it;
-                    if (it != cyclePath.rend() - 1)
-                    {
-                        cout << "->";
-                    }
-                }
-                cout << endl;
-
-                return true;
-            }
         }
-    }
 
-    // If no cycle is found, backtrack
-    cycle.pop_back();
-    return false;
-}
-
-bool Algorithms::isContainsCycle(Graph &g)
-{
-    // If the graph is empty, it cannot contain cycles
-    if (g.getnumVertices() == 0)
-    {
+        // If no cycle is found, backtrack
+        cycle.pop_back();
         return false;
     }
 
-    // Initialize vectors to track visited vertices and their parents
-    size_t V = g.getnumVertices();
-    vector<bool> visited(V, false);
-    vector<size_t> parent(V, (size_t)-1);
-    deque<int> cycle;
-
-    // Iterate over each vertex to start the DFS from all unvisited vertices
-    for (size_t v = 0; v < V; v++)
+    bool Algorithms::isContainsCycle(Graph &g)
     {
-        if (!visited[v] && DFSCycle(g, v, visited, parent, cycle))
+        // If the graph is empty, it cannot contain cycles
+        if (g.getnumVertices() == 0)
         {
-            return true;
+            return false;
         }
+
+        // Initialize vectors to track visited vertices and their parents
+        size_t V = g.getnumVertices();
+        vector<bool> visited(V, false);
+        vector<size_t> parent(V, (size_t)-1);
+        deque<int> cycle;
+
+        // Iterate over each vertex to start the DFS from all unvisited vertices
+        for (size_t v = 0; v < V; v++)
+        {
+            if (!visited[v] && DFSCycle(g, v, visited, parent, cycle))
+            {
+                return true;
+            }
+        }
+
+        // If no cycle is found in any DFS traversal, return false
+        return false;
     }
-
-    // If no cycle is found in any DFS traversal, return false
-    return false;
-}
-
 
     bool Algorithms::isBipartiteUtil(const Graph &g, size_t v, std::vector<int> &color)
     {
@@ -309,66 +308,64 @@ bool Algorithms::isContainsCycle(Graph &g)
     }
 
     std::string Algorithms::negativeCycleUtil(const Graph &g, size_t source)
-{
-    size_t numVertices = g.getnumVertices();
-    std::vector<int> distance(numVertices, std::numeric_limits<int>::max());
-    std::vector<size_t> predecessor(numVertices, (size_t)-1);
-    distance[source] = 0;
-
-    // Relax all edges numVertices - 1 times
-    for (size_t i = 1; i <= numVertices - 1; i++)
     {
+        size_t numVertices = g.getnumVertices();
+        std::vector<int> distance(numVertices, std::numeric_limits<int>::max());
+        std::vector<size_t> predecessor(numVertices, (size_t)-1);
+        distance[source] = 0;
+
+        // Relax all edges numVertices - 1 times
+        for (size_t i = 1; i <= numVertices - 1; i++)
+        {
+            for (size_t u = 0; u < numVertices; u++)
+            {
+                for (size_t v = 0; v < numVertices; v++)
+                {
+                    if (g.getAdjacencyMatrix()[u][v] != 0 && distance[u] != std::numeric_limits<int>::max() && distance[u] + g.getAdjacencyMatrix()[u][v] < distance[v])
+                    {
+                        distance[v] = distance[u] + g.getAdjacencyMatrix()[u][v];
+                        predecessor[v] = u;
+                    }
+                }
+            }
+        }
+
+        // Check for negative-weight cycles
         for (size_t u = 0; u < numVertices; u++)
         {
             for (size_t v = 0; v < numVertices; v++)
             {
                 if (g.getAdjacencyMatrix()[u][v] != 0 && distance[u] != std::numeric_limits<int>::max() && distance[u] + g.getAdjacencyMatrix()[u][v] < distance[v])
                 {
-                    distance[v] = distance[u] + g.getAdjacencyMatrix()[u][v];
-                    predecessor[v] = u;
+                    // Negative cycle found, construct cycle
+                    std::vector<int> cycle;
+                    for (size_t v = u;; v = predecessor[v])
+                    {
+                        cycle.push_back(v);
+                        if (v == u && cycle.size() > 1)
+                        {
+                            break;
+                        }
+                    }
+                    std::reverse(cycle.begin(), cycle.end());
+
+                    // Construct the cycle string with "->" between vertices
+                    std::string cycleStr = "Negative cycle: ";
+                    for (size_t i = 0; i < cycle.size(); ++i)
+                    {
+                        cycleStr += std::to_string(cycle[i]);
+                        if (i < cycle.size() - 1)
+                        {
+                            cycleStr += "->";
+                        }
+                    }
+                    return cycleStr;
                 }
             }
         }
+
+        return "No negative cycle";
     }
-
-    // Check for negative-weight cycles
-    for (size_t u = 0; u < numVertices; u++)
-    {
-        for (size_t v = 0; v < numVertices; v++)
-        {
-            if (g.getAdjacencyMatrix()[u][v] != 0 && distance[u] != std::numeric_limits<int>::max() && distance[u] + g.getAdjacencyMatrix()[u][v] < distance[v])
-            {
-                // Negative cycle found, construct cycle
-                std::vector<int> cycle;
-                for (size_t v = u;; v = predecessor[v])
-                {
-                    cycle.push_back(v);
-                    if (v == u && cycle.size() > 1)
-                    {
-                        break;
-                    }
-                }
-                std::reverse(cycle.begin(), cycle.end());
-
-                // Construct the cycle string with "->" between vertices
-                std::string cycleStr = "Negative cycle: ";
-                for (size_t i = 0; i < cycle.size(); ++i)
-                {
-                    cycleStr += std::to_string(cycle[i]);
-                    if (i < cycle.size() - 1)
-                    {
-                        cycleStr += "->";
-                    }
-                }
-                return cycleStr;
-            }
-        }
-    }
-
-    return "No negative cycle";
-}
-
-
 
     std::string Algorithms::negativeCycle(Graph &g)
     {
