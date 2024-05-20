@@ -64,6 +64,7 @@ namespace ariel
         friend Graph operator/(int scalar, const Graph &graph);
         // Scalar multiplication operator (scalar * graph)
         friend Graph operator*(int scalar, const Graph &graph);
+        static bool isSimetric(const std::vector<std::vector<int>> &matrix);
 
     private:
         size_t vertices;
@@ -71,7 +72,6 @@ namespace ariel
         bool isWeighted;
         std::vector<std::vector<int>> adjacencyMatrix;
 
-        bool isSimetric(const std::vector<std::vector<int>> &matrix) const;
         size_t countEdges() const;
     };
 

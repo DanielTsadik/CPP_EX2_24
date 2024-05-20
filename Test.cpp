@@ -691,17 +691,17 @@ TEST_CASE("Test < operator")
 
     ariel::Graph g3;
     vector<vector<int>> graph3 = {
-        {0, 1, 0},
+        {0, 1, 1},
         {1, 0, 1},
-        {0, 1, 0}};
+        {1, 1, 0}};
     g3.loadGraph(graph3);
     ariel::Graph g4;
     vector<vector<int>> graph4 = {
-        {0, 1, 0, 0, 1},
-        {1, 0, 1, 0, 0},
-        {0, 1, 0, 1, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 1, 1},
         {0, 0, 1, 0, 1},
-        {1, 0, 0, 1, 0}};
+        {0, 0, 1, 1, 0}};
     g4.loadGraph(graph4);
     CHECK(g3 < g4);
 

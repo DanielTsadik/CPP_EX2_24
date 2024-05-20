@@ -14,7 +14,7 @@ namespace ariel
 {
 
     // Checks if a given matrix is symmetric
-    bool Graph::isSimetric(const std::vector<std::vector<int>> &matrix) const
+    bool Graph::isSimetric(const std::vector<std::vector<int>> &matrix)
     {
         for (size_t i = 0; i < matrix.size(); i++)
         {
