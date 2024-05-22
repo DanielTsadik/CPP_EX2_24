@@ -67,6 +67,8 @@ namespace ariel
         static bool isSimetric(const std::vector<std::vector<int>> &matrix);
 
     private:
+        // Method to check if this graph is a subgraph of another graph
+        bool isSubgraph(const Graph &other) const;
         size_t vertices;
         bool isDirected;
         bool isWeighted;

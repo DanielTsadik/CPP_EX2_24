@@ -7,6 +7,8 @@
 #include <stdexcept>
 #include <vector>
 #include <sstream>
+#include <algorithm>
+#include <numeric>
 
 using namespace std;
 
@@ -395,9 +397,54 @@ namespace ariel
         return *this;
     }
 
-    // Comparison operators: compare two graphs
+    bool Graph::isSubgraph(const Graph &other) const
+    {
+        if (vertices > other.vertices)
+        {
+            return false;
+        }
+
+        // Create a vector for vertex mapping
+        std::vector<size_t> mapping(other.vertices);
+        std::iota(mapping.begin(), mapping.end(), 0);
+
+        // Try all permutations of the vertex mapping
+        do
+        {
+            bool is_subgraph = true;
+            for (size_t i = 0; i < vertices && is_subgraph; ++i)
+            {
+                for (size_t j = 0; j < vertices && is_subgraph; ++j)
+                {
+                    if (adjacencyMatrix[i][j] != 0 && other.adjacencyMatrix[mapping[i]][mapping[j]] == 0)
+                    {
+                        is_subgraph = false;
+                    }
+                }
+            }
+            if (is_subgraph)
+            {
+                return true;
+            }
+        } while (std::next_permutation(mapping.begin(), mapping.end()));
+
+        return false;
+    }
+
     bool Graph::operator<(const Graph &other) const
     {
+        // Check if this graph is a subgraph of the other
+        if (this->isSubgraph(other) && !other.isSubgraph(*this))
+        {
+            return true;
+        }
+
+        // Check if the other graph is a subgraph of this one
+        if (other.isSubgraph(*this) && !this->isSubgraph(other))
+        {
+            return false;
+        }
+
         // Compare number of edges
         size_t thisEdges = this->countEdges();
         size_t otherEdges = other.countEdges();
@@ -407,41 +454,41 @@ namespace ariel
         }
 
         // If number of edges is the same, compare number of vertices
-        if (this->vertices != other.vertices)
-        {
-            return this->vertices < other.vertices;
-        }
-
-        // If number of edges and vertices are the same, perform element-wise comparison
-        for (size_t i = 0; i < this->vertices; ++i)
-        {
-            for (size_t j = 0; j < this->vertices; ++j)
-            {
-                if (this->adjacencyMatrix[i][j] != other.adjacencyMatrix[i][j])
-                {
-                    return this->adjacencyMatrix[i][j] < other.adjacencyMatrix[i][j];
-                }
-            }
-        }
-
-        // If all else is equal, the graphs are not less than each other
-        return false;
+        return this->vertices < other.vertices;
     }
 
     size_t Graph::countEdges() const
     {
         size_t count = 0;
-        for (const auto &row : this->adjacencyMatrix)
+        if (isSimetric(this->adjacencyMatrix))
         {
-            for (int val : row)
+            for (size_t i = 0; i < this->vertices; ++i)
             {
-                if (val != 0)
+                for (size_t j = 0; j < this->vertices; ++j)
                 {
-                    count++;
+                    if (this->adjacencyMatrix[i][j] != 0)
+                    {
+                        count++;
+                    }
                 }
             }
+            count = count / 2;
         }
-        return count / 2; // Assuming undirected graph, each edge is counted twice
+        else
+        {
+            for (size_t i = 0; i < this->vertices; ++i)
+            {
+                for (size_t j = 0; j < this->vertices; ++j)
+                {
+                    if (this->adjacencyMatrix[i][j] != 0)
+                    {
+                        count++;
+                    }
+                }
+            }
+            count = count;
+        }
+        return count;
     }
 
     bool Graph::operator>(const Graph &other) const

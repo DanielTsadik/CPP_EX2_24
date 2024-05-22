@@ -735,6 +735,51 @@ TEST_CASE("Test < operator")
         {0, 0, 1, 0}};
     g8.loadGraph(graph8);
     CHECK(g7 < g8);
+
+    // Test if one graph has more vertices and edges than the other
+    ariel::Graph g9;
+    vector<vector<int>> graph9 = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 1, 0}};
+
+    g9.loadGraph(graph9);   
+    ariel::Graph g10;
+    vector<vector<int>> graph10 = {
+        {1, 1},
+        {1, 1}};
+    g10.loadGraph(graph10);
+    CHECK_FALSE(g9 < g10);
+
+    // Test if one graph has more vertices and edges than the other
+    ariel::Graph g11;
+    vector<vector<int>> graph11 = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 1, 0}};
+    g11.loadGraph(graph11); 
+    ariel::Graph g12;
+    vector<vector<int>> graph12 = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 0, 0}};
+    g12.loadGraph(graph12);
+    CHECK_FALSE(g11 < g12);
+
+    // Check if one directed graph with more edges is greater than the other indirected graph with less edges
+    ariel::Graph g13;
+    vector<vector<int>> graph13 = {
+        {0, 1, 0},
+        {0, 0, 3},
+        {4, 0, 0}};
+    g13.loadGraph(graph13);
+    ariel::Graph g14;
+    vector<vector<int>> graph14 = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 1, 0}};
+    g14.loadGraph(graph14);
+    CHECK(g14 < g13);
 }
 
 TEST_CASE("Test != operator")
